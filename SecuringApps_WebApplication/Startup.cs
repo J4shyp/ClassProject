@@ -30,8 +30,14 @@ namespace SecuringApps_WebApplication
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<ApplicationUser>(
+                options => {
+                    options.SignIn.RequireConfirmedAccount = true;
+                    options.Password.RequiredLength = 6;
+                    options.Lockout.DefaultLockoutTimeSpan = new TimeSpan(0, 6, 0);
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
